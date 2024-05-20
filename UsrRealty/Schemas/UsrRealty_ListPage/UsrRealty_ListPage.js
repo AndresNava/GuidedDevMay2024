@@ -65,8 +65,46 @@ define("UsrRealty_ListPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHE
 							"caption": "#ResourceString(PDS_CreatedOn)#",
 							"dataValueType": 7
 						}
-					]
+					],
+					"selectionState": "$DataTable_SelectionState",
+					"_selectionOptions": {
+						"attribute": "DataTable_SelectionState"
+					},
+					"visible": true,
+					"fitContent": true
 				}
+			},
+			{
+				"operation": "insert",
+				"name": "Button_y970h8e",
+				"values": {
+					"type": "crt.Button",
+					"caption": "#ResourceString(Button_y970h8e_caption)#",
+					"color": "primary",
+					"disabled": false,
+					"size": "medium",
+					"iconPosition": "only-text",
+					"visible": true,
+					"clicked": {
+						"request": "crt.RunBusinessProcessRequest",
+						"params": {
+							"processName": "UsrCalcAverageRealtyPriceProcess",
+							"processRunType": "ForTheSelectedRecords",
+							"showNotification": true,
+							"dataSourceName": "PDS",
+							"parameterMappings": {
+								"RealtyParameter": "Id"
+							},
+							"filters": "$Items | crt.ToCollectionFilters : 'Items' : $DataTable_SelectionState | crt.SkipIfSelectionEmpty : $DataTable_SelectionState",
+							"sorting": "$ItemsSorting",
+							"selectionStateAttributeName": "DataTable_SelectionState"
+						}
+					},
+					"clickMode": "default"
+				},
+				"parentName": "RightFilterContainer",
+				"propertyName": "items",
+				"index": 0
 			}
 		]/**SCHEMA_VIEW_CONFIG_DIFF*/,
 		viewModelConfigDiff: /**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/[

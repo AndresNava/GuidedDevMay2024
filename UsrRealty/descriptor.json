@@ -17,6 +17,11 @@
         "UId": "5d1e67dc-6fef-dd15-57b9-4d22771693ae",
         "Name": "DevClassic",
         "Type": 1
+      },
+      {
+        "UId": "b8f2f1f3-d3d2-4067-90d5-7abb97d3e4fe",
+        "Name": "UsrRealtyMigration",
+        "Type": 1
       }
     ]
   }
