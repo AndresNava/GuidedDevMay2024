@@ -107,10 +107,10 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 			},
 			{
 				"operation": "insert",
-				"name": "CalcMaxPriceMenuItem",
+				"name": "CalcMinPriceMenuItem",
 				"values": {
 					"type": "crt.MenuItem",
-					"caption": "#ResourceString(MenuItem_cnlf5b4_caption)#",
+					"caption": "#ResourceString(CalcMinPriceMenuItem_caption)#",
 					"visible": true,
 					"clicked": {
 						"request": "usr.RunWebServiceButtonRequest"
@@ -120,6 +120,28 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 				"parentName": "Button_qlwc25e",
 				"propertyName": "menuItems",
 				"index": 1
+			},
+			{
+				"operation": "insert",
+				"name": "AddVisitsMenuItem",
+				"values": {
+					"type": "crt.MenuItem",
+					"caption": "#ResourceString(MenuItem_7u2cpro_caption)#",
+					"visible": true,
+					"clicked": {
+						"request": "crt.RunBusinessProcessRequest",
+						"params": {
+							"processName": "UsrAutoAddRealtyVisitsProcess",
+							"processRunType": "ForTheSelectedPage",
+							"showNotification": true,
+							"recordIdProcessParameterName": "RealtyParameter"
+						}
+					},
+					"icon": "add-button-icon"
+				},
+				"parentName": "Button_qlwc25e",
+				"propertyName": "menuItems",
+				"index": 2
 			},
 			{
 				"operation": "insert",
@@ -795,7 +817,7 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 							"MySuperValidator": {
 								"type": "usr.DGValidator",
 								"params": {
-									"minValue": 50,
+									"minValue": 0,
 									"message": "#ResourceString(PriceCannotBeLess)#"
 								}
 							}
@@ -809,7 +831,7 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 							"MySuperValidator": {
 								"type": "usr.DGValidator",
 								"params": {
-									"minValue": 100,
+									"minValue": 0,
 									"message": "#ResourceString(AreaCannotBeLess)#"
 								}
 							}
@@ -828,6 +850,16 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 					"PDS_UsrComment_jyrvj9d": {
 						"modelConfig": {
 							"path": "PDS.UsrComment"
+						},
+						"validators": {
+							"MySuperValidator": {
+								"type": "usr.DGValidatorComment",
+								"params": {
+									"minValue": 10000,
+									"priceValue": 5000,
+									"message": "#ResourceString(CommentCannotIsReq)#"
+								}
+							}
 						}
 					},
 					"PDS_UsrManager_yvjzlcc": {
@@ -1043,7 +1075,7 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
                   const baseUrl = Terrasoft.utils.uri.getConfigurationWebServiceBaseUrl();
                   const transferName = "rest";
                   const serviceName = "RealtyService";
-                  const methodName = "GetMaxPriceByTypeId";
+                  const methodName = "GetMinPriceByTypeId";
                   const endpoint = Terrasoft.combinePath(baseUrl, transferName, serviceName, methodName);
 
                 //const endpoint = "http://localhost/D1_Studio/0/rest/RealtyService/GetTotalAmountByTypeId";
@@ -1055,7 +1087,7 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
                 };
                 const response = await httpClientService.post(endpoint, params);
                 
-                this.console.log("response max price = " + response.body.GetTotalAmountByTypeIdResult);
+                this.console.log("response min price = " + response.body.GetTotalAmountByTypeIdResult);
     
                 /* Call the next handler if it exists and return its result. */
                 return next?.handle(request);
@@ -1088,6 +1120,38 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
                 params: [{
                         name: "minValue"
                     }, {
+                        name: "message"
+                    }
+                ],
+                async: false
+            },
+            "usr.DGValidatorComment": {
+                validator: function (config) {
+                    return function (control) {
+                        let value = control.value;
+                        let minValue = config.minValue;
+                        let priceValue = config.priceValue;
+                        let valueIsCorrect = priceValue < minValue;
+                        var result;
+                        if (valueIsCorrect) {
+                            result = null;
+                        } else {
+                            result = {
+                                "usr.DGValidatorComment": {
+                                    message: config.message
+                                }
+                            };
+                        }
+                        return result;
+                    };
+                },
+                params: [{
+                        name: "minValue"
+                    },
+                         {
+                        name: "priceValue"
+                    },
+                         {
                         name: "message"
                     }
                 ],
