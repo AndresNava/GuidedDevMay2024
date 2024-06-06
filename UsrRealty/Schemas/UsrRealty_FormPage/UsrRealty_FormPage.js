@@ -850,16 +850,6 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
 					"PDS_UsrComment_jyrvj9d": {
 						"modelConfig": {
 							"path": "PDS.UsrComment"
-						},
-						"validators": {
-							"MySuperValidator": {
-								"type": "usr.DGValidatorComment",
-								"params": {
-									"minValue": 10000,
-									"priceValue": 5000,
-									"message": "#ResourceString(CommentCannotIsReq)#"
-								}
-							}
 						}
 					},
 					"PDS_UsrManager_yvjzlcc": {
@@ -1120,38 +1110,6 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
                 params: [{
                         name: "minValue"
                     }, {
-                        name: "message"
-                    }
-                ],
-                async: false
-            },
-            "usr.DGValidatorComment": {
-                validator: function (config) {
-                    return function (control) {
-                        let value = control.value;
-                        let minValue = config.minValue;
-                        let priceValue = config.priceValue;
-                        let valueIsCorrect = priceValue < minValue;
-                        var result;
-                        if (valueIsCorrect) {
-                            result = null;
-                        } else {
-                            result = {
-                                "usr.DGValidatorComment": {
-                                    message: config.message
-                                }
-                            };
-                        }
-                        return result;
-                    };
-                },
-                params: [{
-                        name: "minValue"
-                    },
-                         {
-                        name: "priceValue"
-                    },
-                         {
                         name: "message"
                     }
                 ],
