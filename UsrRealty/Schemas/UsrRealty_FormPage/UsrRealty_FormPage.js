@@ -1093,7 +1093,7 @@ define("UsrRealty_FormPage", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA
                     return function (control) {
                         let value = control.value;
                         let minValue = config.minValue;
-                        let valueIsCorrect = value >= minValue;
+                        let valueIsCorrect = value > minValue;
                         var result;
                         if (valueIsCorrect) {
                             result = null;
