@@ -25,7 +25,7 @@ namespace Terrasoft.Configuration
 
           string comment = realty.GetTypedColumnValue<string>("UsrComment");
 
-          if(price < 10000 && string.IsNullOrEmpty(comment))
+          if(price < 20000 && string.IsNullOrEmpty(comment))
           {
               e.IsCanceled = true;
 
